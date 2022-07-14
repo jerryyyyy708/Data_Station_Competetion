@@ -10,23 +10,24 @@ def create_dataframe(products):
     df=pd.DataFrame(columns=df_head)
     return df
 
+mode = 'product' #department, use add parse
 df=pd.read_csv('encoded.csv')
 df=df.drop(columns=['Unnamed: 0'])
 
 customers= df['customer'].unique().tolist()
-products = df['product'].unique().tolist()
+products = df[mode].unique().tolist()
 new_dataframe=create_dataframe(len(products))
 
 for i in customers:
     customer_df = df.loc[df.customer == i]
-    values = customer_df['product'].value_counts().keys().tolist()
-    counts = customer_df['product'].value_counts().tolist()
+    values = customer_df[mode].value_counts().keys().tolist()
+    counts = customer_df[mode].value_counts().tolist()
     orders = customer_df['id'].unique().tolist()
 
     tempdf = customer_df.loc[customer_df.id != orders[-1]]
     target = customer_df.loc[customer_df.id == orders[-1]]
 
-    target_orders = target['product'].unique().tolist()
+    target_orders = target[mode].unique().tolist()
 
     new_row = [0] * len(products)
     new_tail = [0] * len(products)
